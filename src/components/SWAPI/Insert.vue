@@ -1,18 +1,57 @@
 <script>
 export default {
-  props: ["data"]
+  props: ["data"],
+  data() {
+    return {
+      displayValue: undefined
+    };
+  },
+  methods: {
+    upperCaseKey(key) {
+      return key.charAt(0).toUpperCase() + key.slice(1);
+    },
+    async fetchLink(link) {
+      try {
+        const response = await fetch(link);
+        const data = await response.json();
+        return data.name ? data.name : data.title;
+      } catch (error) {
+        this.error = error;
+      }
+    }
+  },
+  mounted() {
+    if (typeof this.data.value === "string") {
+      if (this.data.value.includes("http")) {
+        this.fetchLink(this.data.value).then(
+          response => (this.displayValue = response)
+        );
+      } else {
+        this.displayValue = this.data.value;
+      }
+    } else if (this.data.value instanceof Array) {
+      this.displayValue = [];
+      this.data.value.map(thing => {
+        this.fetchLink(thing).then(response =>
+          this.displayValue.push(response)
+        );
+      });
+    } else {
+      this.displayValue = "n/a";
+    }
+  }
 };
 </script>
 
 <template>
-  <div class="box">
-    <p>{{ this.data.key }}:</p>
-    <p v-if="typeof this.data.value === 'string'">
-      {{ this.data.value }}
+  <div class="flex justify-between w-full">
+    <p class="font-bold">{{ upperCaseKey(this.data.key) }}:</p>
+    <p v-if="typeof this.displayValue === 'string'">
+      {{ this.displayValue }}
     </p>
-    <ul v-else>
-      <li v-for="arr in this.data.value" :key="arr">{{ arr }}</li>
-    </ul>
+    <div v-else class="text-right">
+      <p v-for="arr in this.displayValue" :key="arr">{{ arr }}</p>
+    </div>
   </div>
 </template>
 

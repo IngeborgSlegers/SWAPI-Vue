@@ -5,11 +5,8 @@ export default {
   props: ["element"],
   data() {
     return {
-      keys: Object.keys(this.element)
+      keys: Object.keys(this.element).filter(key => key !== "created" && key !== "edited" && key !== "url")
     };
-  },
-  mounted() {
-    console.log(this.keys, this.element);
   },
   components: {
     Insert
@@ -18,14 +15,9 @@ export default {
 </script>
 
 <template>
-  <div class="card">
+  <div class="border border-black p-3 hover:shadow">
     <div v-for="key in keys" :key="key" class="insert">
       <Insert :data="{key: key, value: this.element[key]}"/>
-      <!-- <p>{{ key }}:</p>
-      <p v-if="typeof this.element[key] === 'string'">
-        {{ this.element[key] }}
-      </p>
-      <li v-else v-for="arr in this.element[key]" :key="arr">{{ arr }}</li> -->
     </div>
   </div>
 </template>
