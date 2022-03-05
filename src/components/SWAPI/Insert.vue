@@ -1,15 +1,12 @@
 <script>
 export default {
-  props: ["data"],
+  props: ["data", "upperCaseKey"],
   data() {
     return {
       displayValue: undefined
     };
   },
   methods: {
-    upperCaseKey(key) {
-      return key.charAt(0).toUpperCase() + key.slice(1);
-    },
     async fetchLink(link) {
       try {
         const response = await fetch(link);
@@ -21,6 +18,7 @@ export default {
     }
   },
   mounted() {
+    // console.log(this.data)
     if (typeof this.data.value === "string") {
       if (this.data.value.includes("http")) {
         this.fetchLink(this.data.value).then(
@@ -29,7 +27,7 @@ export default {
       } else {
         this.displayValue = this.data.value;
       }
-    } else if (this.data.value instanceof Array) {
+    } else if (this.data.value instanceof Array && this.data.value.length > 0) {
       this.displayValue = [];
       this.data.value.map(thing => {
         this.fetchLink(thing).then(response =>
@@ -37,6 +35,7 @@ export default {
         );
       });
     } else {
+      console.log("not a string or an array", this.data.value)
       this.displayValue = "n/a";
     }
   }
@@ -45,8 +44,8 @@ export default {
 
 <template>
   <div class="flex justify-between w-full">
-    <p class="font-bold">{{ upperCaseKey(this.data.key) }}:</p>
-    <p v-if="typeof this.displayValue === 'string'">
+    <p class="font-bold">{{ this.upperCaseKey(this.data.key) }}:</p>
+    <p v-if="typeof this.displayValue === 'string' ">
       {{ this.displayValue }}
     </p>
     <div v-else class="text-right">

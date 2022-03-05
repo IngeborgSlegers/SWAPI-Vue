@@ -10,6 +10,9 @@ export default {
   },
   components: {
     Insert
+  },
+  mounted() {
+    console.log(element)
   }
 };
 </script>
