@@ -47,6 +47,7 @@ export default {
   },
   mounted() {
     this.fetchBase();
+    console.log(this.$route)
   },
   watch: {
     moreInfo: {
