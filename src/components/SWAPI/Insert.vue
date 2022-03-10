@@ -35,10 +35,9 @@ export default {
         );
       });
     } else {
-      console.log("not a string or an array", this.data.value)
       this.displayValue = "n/a";
     }
-  }
+  },
 };
 </script>
 

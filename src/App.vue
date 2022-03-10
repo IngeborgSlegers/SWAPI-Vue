@@ -9,7 +9,7 @@ export default {
       swapiData: [],
       baseOptions: {},
       error: null,
-      moreInfo: {}
+      moreInfo: {},
     };
   },
   methods: {
@@ -43,26 +43,44 @@ export default {
     },
     upperCaseKey(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    },
   },
   mounted() {
     this.fetchBase();
-    console.log(this.$route)
   },
   watch: {
     moreInfo: {
       handler(newState, oldState) {
-        if(newState != oldState && oldState) {
+        if (newState != oldState && oldState) {
           this.moreInfo = newState;
         }
       },
-    }
+    },
+  },
+  created() {
+    this.$watch(
+      () => this.$route,
+      (toRoute) => {
+        if (toRoute.params.details) {
+          this.fetchSWAPIFromLink(
+            `https://swapi.dev/api/${toRoute.params.swapiValue}`
+          ).then(() => {
+            const filtered = this.swapiData.filter((swap) => swap.name == toRoute.params.details || swap.title == toRoute.params.details)
+            this.fetchDetailedInfo(filtered[0].url)
+          });
+        } else if (toRoute.params.swapiValue) {
+          this.fetchSWAPIFromLink(
+            `https://swapi.dev/api/${toRoute.params.swapiValue}`
+          );
+        }
+      }
+    );
   },
   components: {
     Card,
     Name,
-    Insert
-  }
+    Insert,
+  },
 };
 </script>
 
@@ -73,11 +91,22 @@ export default {
       <button
         v-for="(option, key) in baseOptions"
         :key="option"
-        class="text-white text-2xl m-4 px-6 py-4 rounded-full bg-slate-500 hover:bg-sky-500/100"
+        class="
+          text-white text-2xl
+          m-4
+          px-6
+          py-4
+          rounded-full
+          bg-slate-500
+          hover:bg-sky-500/100
+        "
         type="button"
-        @click="fetchSWAPIFromLink(option)"
+        @click="fetchSWAPIFromLink(option, key)"
       >
-        {{ this.upperCaseKey(key) }}
+        <router-link
+          :to="{ name: 'swapiValue', params: { swapiValue: key } }"
+          >{{ this.upperCaseKey(key) }}</router-link
+        >
       </button>
     </div>
     <div class="flex flex-row flex-wrap justify-around">
@@ -89,18 +118,12 @@ export default {
           />
         </p>
       </div>
-      <div  class="border border-black p-3 hover:shadow">
-        <div v-for="(value, key) in moreInfo" :key="{key: value}">
+      <div class="border border-black p-3 hover:shadow">
+        <div v-for="(value, key) in moreInfo" :key="{ key: value }">
           <Insert :data="{ key, value }" :upperCaseKey="this.upperCaseKey" />
         </div>
       </div>
     </div>
-    <!-- <div class="flex flex-row flex-wrap justify-around">
-      <div v-for="element in swapiData" :key="element" class="mb-4">
-        <Card :element="element" />
-        class="border border-black p-3 hover:shadow"
-      </div>
-    </div> -->
   </div>
 </template>
 
