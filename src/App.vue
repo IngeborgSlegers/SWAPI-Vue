@@ -1,6 +1,6 @@
 <script>
-import Card from "./components/SWAPI/Card.vue";
-import Name from "./components/SWAPI/Name.vue";
+// import Card from "./components/SWAPI/CardComponent.vue";
+import Name from "./components/SWAPI/NameDisplayComponent.vue";
 import Insert from "./components/SWAPI/Insert.vue";
 
 export default {
@@ -65,8 +65,12 @@ export default {
           this.fetchSWAPIFromLink(
             `https://swapi.dev/api/${toRoute.params.swapiValue}`
           ).then(() => {
-            const filtered = this.swapiData.filter((swap) => swap.name == toRoute.params.details || swap.title == toRoute.params.details)
-            this.fetchDetailedInfo(filtered[0].url)
+            const filtered = this.swapiData.filter(
+              (swap) =>
+                swap.name == toRoute.params.details ||
+                swap.title == toRoute.params.details
+            );
+            this.fetchDetailedInfo(filtered[0].url);
           });
         } else if (toRoute.params.swapiValue) {
           this.fetchSWAPIFromLink(
@@ -77,7 +81,7 @@ export default {
     );
   },
   components: {
-    Card,
+    // Card,
     Name,
     Insert,
   },
@@ -91,15 +95,7 @@ export default {
       <button
         v-for="(option, key) in baseOptions"
         :key="option"
-        class="
-          text-white text-2xl
-          m-4
-          px-6
-          py-4
-          rounded-full
-          bg-slate-500
-          hover:bg-sky-500/100
-        "
+        class="text-white text-2xl m-4 px-6 py-4 rounded-full bg-slate-500 hover:bg-sky-500/100"
         type="button"
         @click="fetchSWAPIFromLink(option, key)"
       >

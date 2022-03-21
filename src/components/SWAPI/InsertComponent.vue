@@ -3,7 +3,7 @@ export default {
   props: ["data", "upperCaseKey"],
   data() {
     return {
-      displayValue: undefined
+      displayValue: undefined,
     };
   },
   methods: {
@@ -15,22 +15,22 @@ export default {
       } catch (error) {
         this.error = error;
       }
-    }
+    },
   },
   mounted() {
     // console.log(this.data)
     if (typeof this.data.value === "string") {
       if (this.data.value.includes("http")) {
         this.fetchLink(this.data.value).then(
-          response => (this.displayValue = response)
+          (response) => (this.displayValue = response)
         );
       } else {
         this.displayValue = this.data.value;
       }
     } else if (this.data.value instanceof Array && this.data.value.length > 0) {
       this.displayValue = [];
-      this.data.value.map(thing => {
-        this.fetchLink(thing).then(response =>
+      this.data.value.map((thing) => {
+        this.fetchLink(thing).then((response) =>
           this.displayValue.push(response)
         );
       });
@@ -44,7 +44,7 @@ export default {
 <template>
   <div class="flex justify-between w-full">
     <p class="font-bold">{{ this.upperCaseKey(this.data.key) }}:</p>
-    <p v-if="typeof this.displayValue === 'string' ">
+    <p v-if="typeof this.displayValue === 'string'">
       {{ this.displayValue }}
     </p>
     <div v-else class="text-right">

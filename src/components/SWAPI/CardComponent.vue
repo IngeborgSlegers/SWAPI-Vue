@@ -1,26 +1,25 @@
 <script>
-import Insert from './Insert.vue'
+import Insert from "./Insert.vue";
 
 export default {
   props: ["element"],
   data() {
     return {
-      keys: Object.keys(this.element).filter(key => key !== "created" && key !== "edited" && key !== "url")
+      keys: Object.keys(this.element).filter(
+        (key) => key !== "created" && key !== "edited" && key !== "url"
+      ),
     };
   },
   components: {
-    Insert
+    Insert,
   },
-  mounted() {
-    console.log(element)
-  }
 };
 </script>
 
 <template>
   <div class="border border-black p-3 hover:shadow">
     <div v-for="key in keys" :key="key" class="insert">
-      <Insert :data="{key: key, value: this.element[key]}"/>
+      <Insert :data="{ key: key, value: this.element[key] }" />
     </div>
   </div>
 </template>

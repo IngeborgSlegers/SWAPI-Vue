@@ -14,7 +14,7 @@ export default {
     <router-link
       :to="{
         path: `/${this.$route.path}`,
-        params: { details: this.character.name || this.character.title},
+        params: { details: this.character.name || this.character.title },
         name: 'details',
       }"
     >
