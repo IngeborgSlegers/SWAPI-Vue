@@ -1,13 +1,8 @@
-import {
-  createRouter,
-  createWebHistory,
-  createWebHashHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import { createApp } from "vue";
 import App from "./App.vue";
-import Name from "./components/SWAPI/Name.vue";
-import Something from "./components/SWAPI/Something.vue";
-import Insert from "./components/SWAPI/Insert.vue";
+import Name from "./components/SWAPI/NameDisplayComponent.vue";
+import Insert from "./components/SWAPI/InsertComponent.vue";
 import "./index.css";
 
 const router = createRouter({
@@ -31,8 +26,6 @@ const router = createRouter({
         },
       ],
     },
-    // { path: "/something", component: Something },
-    // { path: '/bar', component: Bar },
   ],
 });
 

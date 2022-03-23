@@ -1,16 +1,13 @@
 <script>
 export default {
-  props: ["character", "fetchDetailedInfo"],
+  props: ["character", "fetchDetailedInfo", "searchCache"],
   // mounted() {
   //   console.log("hey", this.character)
   // }
 };
 </script>
 <template>
-  <button
-    @click="fetchDetailedInfo(this.character.url)"
-    class="focus:text-violet-700"
-  >
+  <button class="focus:text-violet-700">
     <router-link
       :to="{
         path: `/${this.$route.path}`,

@@ -1,5 +1,5 @@
 <script>
-import Insert from "./Insert.vue";
+import Insert from "./InsertComponent.vue";
 
 export default {
   props: ["element"],
