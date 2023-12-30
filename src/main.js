@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { createApp } from "vue";
+import { createStore, createLogger } from "vuex";
+import { appModule, insertModule } from "./components/modules/index.js";
 import App from "./App.vue";
 import Name from "./components/SWAPI/NameDisplayComponent.vue";
 import Insert from "./components/SWAPI/InsertComponent.vue";
@@ -29,5 +31,17 @@ const router = createRouter({
   ],
 });
 
-const app = createApp(App).use(router);
+// eslint-disable-next-line no-undef
+const debug = process.env.NODE_ENV !== "production";
+
+const store = createStore({
+  modules: { appModule, insertModule },
+  strict: debug,
+  plugins: debug ? [createLogger()] : [],
+});
+
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
 app.mount("#app");

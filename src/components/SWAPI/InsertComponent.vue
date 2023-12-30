@@ -1,18 +1,35 @@
+<template>
+  <div class="flex justify-between w-full">
+    <p class="font-bold">{{ this.upperCaseKey(this.data.key) }}:</p>
+    <div class="text-right">
+      <p v-if="typeof displayValue === 'string'">
+        {{ this.displayValue }}
+      </p>
+      <p v-else v-for="arr in displayValue" :key="arr">{{ arr }}</p>
+    </div>
+  </div>
+</template>
+
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   props: ["data", "upperCaseKey", "searchCache", "addToCacheFromInsert"],
-  data() {
-    return {
-      displayValue: [],
-    };
+  computed: {
+    ...mapState({
+      displayValue: (state) => state.insertModule.displayValue,
+    }),
   },
   methods: {
+    ...mapActions({
+      setDisplayValue: "insertModule/setDisplayValue",
+      addToLinksCache: "appModule/addToLinksCache",
+    }),
     async fetchLink(link) {
       try {
         const response = await fetch(link);
         const data = await response.json();
         this.addToCacheFromInsert(data);
-        // return data.name ? data.name : data.title;
       } catch (error) {
         this.error = error;
       }
@@ -20,44 +37,38 @@ export default {
     newFunction(url) {
       let dataObject = this.searchCache(url);
       dataObject
-        ? this.displayValue.push(this.extractNameorTitle(url))
+        ? this.setDisplayValue(this.extractNameorTitle(url))
         : this.fetchLink(url);
     },
     extractNameorTitle(url) {
       let data = this.searchCache(url);
       return data.name ? data.name : data.title;
     },
+    howDo() {
+      if (typeof this.data.value === "string") {
+        if (this.data.value.includes("http")) {
+          this.newFunction(this.data.value);
+        } else {
+          this.setDisplayValue(this.data.value);
+        }
+      } else if (
+        this.data.value instanceof Array &&
+        this.data.value.length > 0
+      ) {
+        this.data.value.map((url) => {
+          this.newFunction(url);
+        });
+      } else {
+        this.setDisplayValue("hello");
+        this.setDisplayValue("n/a");
+      }
+    },
   },
   mounted() {
-    if (typeof this.data.value === "string") {
-      if (this.data.value.includes("http")) {
-        this.newFunction(this.data.value);
-      } else {
-        this.displayValue.push(this.data.value);
-      }
-    } else if (this.data.value instanceof Array && this.data.value.length > 0) {
-      this.displayValue = [];
-      this.data.value.map((url) => {
-        this.newFunction(url);
-      });
-    } else {
-      this.displayValue.push("n/a");
-    }
+    this.howDo();
   },
 };
 </script>
-
-<template>
-  <div class="flex justify-between w-full">
-    <p class="font-bold">{{ this.upperCaseKey(this.data.key) }}:</p>
-    <!-- <p v-if="typeof this.displayValue === 'string'">
-      {{ this.displayValue }}
-    </p> -->
-    <div class="text-right">
-      <p v-for="arr in this.displayValue" :key="arr">{{ arr }}</p>
-    </div>
-  </div>
-</template>
 
 <style>
 .box {
